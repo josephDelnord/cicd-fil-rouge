@@ -125,7 +125,14 @@ Le workflow [ci.yml](.github/workflows/ci.yml) s'exécute lors d'une Pull Reques
 - **lint** : exécute `ruff check .` pour détecter les erreurs de style, les imports inutilisés et les erreurs statiques définies par la configuration Ruff du projet.
 - **test** : exécute `pytest` pour vérifier les comportements de l'API et éviter les régressions couvertes par les tests automatisés.
 
-Les checks `lint` et `test` devront tous les deux réussir avant de pouvoir fusionner une Pull Request, une fois configurés comme vérifications de statut obligatoires dans le ruleset de `main`.
+Les checks `lint` et `test` devront tous les deux réussir avant de pouvoir fusionner une Pull Request.
+
+![alt text](<img/Capture d'écran 2026-10-13 145322.png>)
+
+Ensuite on a définit un ruleset pour s'assurer que les jobs lint et test réussissent avant de fusionner une Pull Request dans `main`.
+
+![alt text](<img/Capture d'écran 2026-10-13 145632.png>)
+
 
 ### Capture d'une Pull Request bloquée
 
