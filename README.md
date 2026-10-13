@@ -58,20 +58,22 @@ docker run --rm -p 8000:8000 taskflow
 ## Équipe
 
 <!-- Lab J1 : remplacez par les noms du binôme -->
+- Joseph DELNORD
 - Yani SADKI
 
 ## Gouvernance du dépôt
 
 <!-- Lab J1 : listez les règles activées sur main, pourquoi chacune, et ajoutez la capture du push refusé -->
 
-Règles activées :
+### Règles activées sur `main` et justifications :
 
-✅ Restrict deletions : empêche de supprimer main
-✅ Block force pushes : empêche de réécrire l'historique
-✅ Require a pull request before merging, puis dedans :
-Required approvals : 1
+- **Restrict deletions** : empêche la suppression accidentelle ou malveillante de la branche de production `main`.
+- **Block force pushes** : préserve l'intégrité et la traçabilité de l'historique Git en interdisant toute réécriture (`git push --force`).
+- **Require a pull request before merging (1 approval)** : garantit que tout changement est revu par au moins un pair (le binôme), réduisant ainsi les bugs et facilitant le partage de connaissances.
+- **Require review from Code Owners** : exige obligatoirement l'approbation d'un des propriétaires déclarés dans `.github/CODEOWNERS` dès qu'un fichier critique (ici `.github/workflows/`) est modifié.
 
+### Capture du push direct refusé :
 
-![alt text](<Capture d'écran 2026-10-13 120244.png>)
+![Push direct refusé](<Capture d'écran 2026-10-13 120244.png>)
 
-Cela a été refusé car les règles de protection empêchent les actions directes sur `main`. Il faut donc passer par une pull request pour apporter des modifications.
+*Le push direct a été rejeté par les règles de gouvernance GitHub (Ruleset), rendant obligatoire l'utilisation d'une Pull Request.*
