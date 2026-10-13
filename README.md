@@ -136,6 +136,24 @@ Le workflow [ci.yml](.github/workflows/ci.yml) s'exécute sur les Pull Requests 
 
 Une matrice crée des checks distincts par version de Python, dont les noms peuvent changer selon la matrice. Si le ruleset exige encore les anciens checks `lint` et `test`, la PR peut donc rester bloquée malgré des résultats verts. Le job **CI OK** regroupe les résultats sous un nom unique et stable ; configure uniquement ce check comme obligatoire dans le ruleset.
 
+### Pipeline rapide : étapes 1 à 3
+
+**Étape 1 : matrice, cache et artefacts.** Le run de la PR #7 exécute `lint`, `test` sur Python 3.11, 3.12 et 3.13, puis `CI OK`.
+
+![Run CI avec la matrice Python et CI OK en succès](img/ci-matrice-verte.png)
+
+**Étape 2 : PR bloquée malgré des checks verts.** Le ruleset exige encore un check nommé `test`. La matrice a remplacé ce nom par `test (Python 3.11)`, `test (Python 3.12)` et `test (Python 3.13)` : le check attendu n'est jamais rapporté et le merge reste bloqué.
+
+![PR bloquée : check test attendu, jamais rapporté](img/pr-bloquee-checks-attendus.png)
+
+**Étape 3 : `CI OK` comme seul check obligatoire.** Dans le ruleset `protect-main`, les checks `lint` et `test` sont retirés et seul `CI OK` est exigé.
+
+![Ruleset avec CI OK comme seul check requis](img/ruleset-ci-ok.png)
+
+La PR n'attend alors plus que l'approbation du Code Owner.
+
+![PR débloquée grâce au check CI OK](img/pr-debloquee-ci-ok.png)
+
 ### Mesure du cache pip
 
 Comparer dans les détails des jobs la durée de l'étape « Installer les dépendances » lors d'une exécution sans cache (cache miss) et d'une exécution suivante avec le cache restauré (cache hit). Le premier run remplit généralement le cache ; le run suivant sur la même clé permet de mesurer le gain.
