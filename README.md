@@ -120,20 +120,19 @@ Cette capture montre l'activation de la signature des commits et la vérificatio
 
 ## Pipeline CI
 
-Le workflow [ci.yml](.github/workflows/ci.yml) s'exécute lors d'une Pull Request vers `main` et lors d'un push sur `main`. Il lance deux jobs indépendants en parallèle :
+Le workflow [ci.yml](.github/workflows/ci.yml) s'exécute sur les Pull Requests à destination de `main` et lors d'un push sur `main`. Il exécute deux jobs indépendants en parallèle :
 
-- **lint** : exécute `ruff check .` pour détecter les erreurs de style, les imports inutilisés et les erreurs statiques définies par la configuration Ruff du projet.
-- **test** : exécute `pytest` pour vérifier les comportements de l'API et éviter les régressions couvertes par les tests automatisés.
+- **lint** : lance `ruff check .` pour contrôler les règles de style et détecter notamment les erreurs statiques et les imports inutilisés.
+- **test** : lance `pytest` pour exécuter les tests automatisés de l'API et détecter les régressions fonctionnelles.
 
-Les checks `lint` et `test` devront tous les deux réussir avant de pouvoir fusionner une Pull Request.
+Le ruleset de `main` exige la réussite des checks **lint** et **test** avant la fusion. Une PR dont l'un de ces jobs échoue ne peut donc pas être fusionnée.
 
-![alt text](<img/Capture d'écran 2026-10-13 145322.png>)
+![Exécution réussie des jobs lint et test](<img/Capture d'écran 2026-10-13 145322.png>)
 
-Ensuite on a définit un ruleset pour s'assurer que les jobs lint et test réussissent avant de fusionner une Pull Request dans `main`.
+![Checks lint et test requis dans le ruleset](<img/Capture d'écran 2026-10-13 145632.png>)
 
-![alt text](<img/Capture d'écran 2026-10-13 145632.png>)
+### Démonstration d'une PR bloquée par un test en échec
 
+Sur la branche `fix/casse-test`, le test `test_health_returns_ok` a été volontairement modifié pour attendre une valeur de statut incorrecte. Le job **lint** doit réussir, tandis que le job **test** échoue. Cette démonstration vérifie que le ruleset empêche la fusion lorsque les tests ne passent pas.
 
-### Capture d'une Pull Request bloquée
-
-À compléter à l'étape 5 avec la capture d'une Pull Request dont la fusion est bloquée par un job CI en échec.
+**Capture de la PR montrant le check `test` en échec et la fusion bloquée :** à ajouter après l'exécution des checks GitHub Actions.
