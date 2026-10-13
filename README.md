@@ -103,4 +103,17 @@ Cela montre que les règles de gouvernance sont bien appliquées et que tout cha
 
 ![alt text](<img/Capture d'écran 2026-10-13 124051.png>)
 
+3. Je créé la PR et mon coéquipier l'approuve en tant que propriétaire de fichiers critiques.
 
+![alt text](img/image3.png) ![alt text](img/image4.png)
+
+
+### Bonus : signature des commits
+
+1. Pour renforcer la sécurité et la traçabilité, nous pouvons activer la signature des commits.
+2. Chaque commit devra être signé avec la clé GPG configurée, assurant ainsi l'authenticité de l'auteur du commit.
+3. Les commits non signés seront rejetés, garantissant que chaque modification est vérifiable et provient d'un contributeur authentique.
+
+![alt text](<img/Capture d'écran 2026-10-13 140006.png>)
+
+Cette capture montre l'activation de la signature des commits et la vérification de l'authenticité de chaque modification.
