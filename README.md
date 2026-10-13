@@ -72,13 +72,13 @@ docker run --rm -p 8000:8000 taskflow
 - **Require a pull request before merging (1 approval)** : garantit que tout changement est revu par au moins un pair (le binôme), réduisant ainsi les bugs et facilitant le partage de connaissances.
 - **Require review from Code Owners** : exige obligatoirement l'approbation d'un des propriétaires déclarés dans `.github/CODEOWNERS` dès qu'un fichier critique (ici `.github/workflows/`) est modifié.
 
-![alt text](<img/Capture d'écran 2026-10-13 125726.png>)
+![Règles de protection de main et approbation requise](img/protect-main-rules.png)
 
-![alt text](<img/Capture d'écran 2026-10-13 124051.png>)
+![Règle Require review from Code Owners](img/codeowners-review-required.png)
 
 ### Capture du push direct refusé :
 
-![Push direct refusé](<img/Capture%20d'écran%202026-10-13%20120244.png>)
+![Refus du push direct sur main](img/push-direct-main-refuse.png)
 
 Cela montre que les règles de gouvernance sont bien appliquées et que tout changement doit passer par une Pull Request.
 
@@ -86,27 +86,35 @@ Cela montre que les règles de gouvernance sont bien appliquées et que tout cha
 
 1. je créé une Pull Request, je remplis les informations nécessaires et je soumets pour revue.
 
-![alt text](<img/Capture d'écran 2026-10-13 122510.png>) ![alt text](<img/Capture d'écran 2026-10-13 122520.png>) ![alt text](<img/Capture d'écran 2026-10-13 122527.png>)
-![alt text](<img/Capture d'écran 2026-10-13 122620.png>)
+![Commit signé vérifié sur GitHub](img/commit-signature-verified.png)
+
+![Historique des commits de la branche](img/commits-feature-branch.png)
+
+![Liste des rulesets GitHub](img/ruleset-list.png)
+
+![Formulaire de création de Pull Request](img/pull-request-create.png)
 
 2. Mon coéquipier révise la Pull Request et laisse ses commentaires ou approbations.
 
-![alt text](img/image.png) ![alt text](img/image2.png)
+![Approbation de la Pull Request par le binôme](img/pr-approved.png)
+
+![Soumission de l'approbation de la Pull Request](img/pr-submit-approval.png)
 
 ### Création des CODEOWNERS
 
 1. Je créé les CODEOWNERS pour définir les propriétaires des fichiers critiques.
 
-![alt text](<img/Capture d'écran 2026-10-13 123932.png>)
+![Fichier CODEOWNERS dans le dépôt](img/codeowners-file.png)
 
 2. Je coche la case correspondant à l'option "Require review from Code Owners" pour activer l'approbation obligatoire des propriétaires de fichiers critiques.
 
-![alt text](<img/Capture d'écran 2026-10-13 124051.png>)
+![Règle Require review from Code Owners](img/codeowners-review-required.png)
 
 3. Je créé la PR et mon coéquipier l'approuve en tant que propriétaire de fichiers critiques.
 
-![alt text](img/image3.png) ![alt text](img/image4.png)
+![Confirmation de fusion de la PR CODEOWNERS](img/codeowners-pr-merge.png)
 
+![Pull Request CODEOWNERS approuvée](img/codeowners-pr-approved.png)
 
 ### Bonus : signature des commits
 
@@ -114,7 +122,7 @@ Cela montre que les règles de gouvernance sont bien appliquées et que tout cha
 2. Chaque commit devra être signé avec la clé GPG configurée, assurant ainsi l'authenticité de l'auteur du commit.
 3. Les commits non signés seront rejetés, garantissant que chaque modification est vérifiable et provient d'un contributeur authentique.
 
-![alt text](<img/Capture d'écran 2026-10-13 140006.png>)
+![Signature SSH vérifiée](img/ssh-signature-verified.png)
 
 Cette capture montre l'activation de la signature des commits et la vérification de l'authenticité de chaque modification.
 
@@ -127,12 +135,16 @@ Le workflow [ci.yml](.github/workflows/ci.yml) s'exécute sur les Pull Requests 
 
 Le ruleset de `main` exige la réussite des checks **lint** et **test** avant la fusion. Une PR dont l'un de ces jobs échoue ne peut donc pas être fusionnée.
 
-![Exécution réussie des jobs lint et test](<img/Capture d'écran 2026-10-13 145322.png>)
+![Jobs CI lint et test réussis](img/ci-jobs-success.png)
 
-![Checks lint et test requis dans le ruleset](<img/Capture d'écran 2026-10-13 145632.png>)
+![Checks lint et test requis par le ruleset](img/ci-required-checks.png)
 
 ### Démonstration d'une PR bloquée par un test en échec
 
-Sur la branche `fix/casse-test`, le test `test_health_returns_ok` a été volontairement modifié pour attendre une valeur de statut incorrecte. Le job **lint** doit réussir, tandis que le job **test** échoue. Cette démonstration vérifie que le ruleset empêche la fusion lorsque les tests ne passent pas.
+Sur la branche `fix/casse-test`, le test `test_health_returns_ok` a été volontairement modifié pour attendre une valeur de statut incorrecte.
 
-**Capture de la PR montrant le check `test` en échec et la fusion bloquée :** à ajouter après l'exécution des checks GitHub Actions.
+![Diff du test volontairement rendu défaillant](img/failing-test-diff.png)
+
+Le job **lint** doit réussir, tandis que le job **test** échoue. Cette démonstration vérifie que le ruleset empêche la fusion lorsque les tests ne passent pas.
+
+![Fusion bloquée par l'échec du check test](img/pr-ci-merge-blocked.png)
