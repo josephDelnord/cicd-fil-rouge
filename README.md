@@ -130,6 +130,28 @@ Cette capture montre l'activation de la signature des commits et la vérificatio
 
 ## Pipeline CI
 
+### Partie 1 : lint et tests (CI de base)
+
+Premier pipeline : `lint` (ruff) et `test` (pytest), exigés comme checks obligatoires par le ruleset.
+
+#### Résultats du pipeline
+
+![Jobs CI lint et test réussis](img/ci-jobs-success.png)
+
+![Checks lint et test requis par le ruleset](img/ci-required-checks.png)
+
+#### Démonstration d'une PR bloquée par un test en échec
+
+Sur la branche `fix/casse-test`, le test `test_health_returns_ok` a été volontairement modifié pour attendre une valeur de statut incorrecte.
+
+![Diff du test volontairement rendu défaillant](img/failing-test-diff.png)
+
+Le job **lint** doit réussir, tandis que le job **test** échoue. Cette démonstration vérifie que le ruleset empêche la fusion lorsque les tests ne passent pas.
+
+![Fusion bloquée par l'échec du check test](img/pr-ci-merge-blocked.png)
+
+### Partie 2 : pipeline plus rapide (cache, matrice, CI OK)
+
 Le workflow [ci.yml](.github/workflows/ci.yml) s'exécute sur les Pull Requests à destination de `main` et lors d'un push sur `main`. Il lance les vérifications en parallèle et interrompt les exécutions précédentes d'une même branche lorsqu'une nouvelle arrive.
 
 - **lint** : lance `ruff check .` pour contrôler le style et détecter des erreurs statiques.
@@ -138,7 +160,7 @@ Le workflow [ci.yml](.github/workflows/ci.yml) s'exécute sur les Pull Requests 
 
 Une matrice crée des checks distincts par version de Python, dont les noms peuvent changer selon la matrice. Si le ruleset exige encore les anciens checks `lint` et `test`, la PR peut donc rester bloquée malgré des résultats verts. Le job **CI OK** regroupe les résultats sous un nom unique et stable ; configure uniquement ce check comme obligatoire dans le ruleset.
 
-### Pipeline rapide : étapes 1 à 3
+#### Pipeline rapide : étapes 1 à 3
 
 **Étape 1 : matrice, cache et artefacts.** Le run de la PR #7 exécute `lint`, `test` sur Python 3.11, 3.12 et 3.13, puis `CI OK`.
 
@@ -156,7 +178,7 @@ La PR n'attend alors plus que l'approbation du Code Owner.
 
 ![PR débloquée grâce au check CI OK](img/pr-debloquee-ci-ok.png)
 
-### Mesure du cache pip
+#### Mesure du cache pip
 
 Durée de l'étape « Installer les dépendances » relevée dans les détails des jobs, sans cache (run #8, cache miss) puis avec cache (run #10, cache hit) :
 
@@ -174,26 +196,10 @@ Le gain est modeste : les dépendances du projet (pytest, httpx, ruff) sont lég
 
 ![Étape d'installation avec cache (cache hit, Python 3.11)](img/cache-hit.png)
 
-### Rapports de tests
+#### Rapports de tests
 
 Dans la page du run GitHub Actions, ouvrir **Artifacts** et télécharger `test-results-3.11`, `test-results-3.12` ou `test-results-3.13`. Chaque archive contient le rapport JUnit de la version Python correspondante.
 
 ![Artefacts publiés par le run CI](img/artefacts-run.png)
 
 ![Rapport JUnit XML contenu dans l'artefact téléchargé](img/artefact-junit-xml.png)
-
-### Captures
-
-![Jobs CI lint et test réussis](img/ci-jobs-success.png)
-
-![Checks lint et test requis par le ruleset](img/ci-required-checks.png)
-
-### Démonstration d'une PR bloquée par un test en échec
-
-Sur la branche `fix/casse-test`, le test `test_health_returns_ok` a été volontairement modifié pour attendre une valeur de statut incorrecte.
-
-![Diff du test volontairement rendu défaillant](img/failing-test-diff.png)
-
-Le job **lint** doit réussir, tandis que le job **test** échoue. Cette démonstration vérifie que le ruleset empêche la fusion lorsque les tests ne passent pas.
-
-![Fusion bloquée par l'échec du check test](img/pr-ci-merge-blocked.png)
