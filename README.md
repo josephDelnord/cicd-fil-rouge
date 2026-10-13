@@ -117,3 +117,16 @@ Cela montre que les règles de gouvernance sont bien appliquées et que tout cha
 ![alt text](<img/Capture d'écran 2026-10-13 140006.png>)
 
 Cette capture montre l'activation de la signature des commits et la vérification de l'authenticité de chaque modification.
+
+## Pipeline CI
+
+Le workflow [ci.yml](.github/workflows/ci.yml) s'exécute lors d'une Pull Request vers `main` et lors d'un push sur `main`. Il lance deux jobs indépendants en parallèle :
+
+- **lint** : exécute `ruff check .` pour détecter les erreurs de style, les imports inutilisés et les erreurs statiques définies par la configuration Ruff du projet.
+- **test** : exécute `pytest` pour vérifier les comportements de l'API et éviter les régressions couvertes par les tests automatisés.
+
+Les checks `lint` et `test` devront tous les deux réussir avant de pouvoir fusionner une Pull Request, une fois configurés comme vérifications de statut obligatoires dans le ruleset de `main`.
+
+### Capture d'une Pull Request bloquée
+
+À compléter à l'étape 5 avec la capture d'une Pull Request dont la fusion est bloquée par un job CI en échec.
