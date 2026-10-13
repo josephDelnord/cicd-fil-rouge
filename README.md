@@ -1,5 +1,7 @@
 # TaskFlow — dépôt fil rouge CI/CD
 
+[![CI](https://github.com/josephDelnord/cicd-fil-rouge/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/josephDelnord/cicd-fil-rouge/actions/workflows/ci.yml)
+
 TaskFlow est une petite API de gestion de tâches écrite en Python avec FastAPI.
 C'est le projet fil rouge du module CI/CD (Mastère DevOps M1, Sup de Vinci) :
 pendant trois jours, vous allez construire autour d'elle un pipeline complet
@@ -156,16 +158,29 @@ La PR n'attend alors plus que l'approbation du Code Owner.
 
 ### Mesure du cache pip
 
-Comparer dans les détails des jobs la durée de l'étape « Installer les dépendances » lors d'une exécution sans cache (cache miss) et d'une exécution suivante avec le cache restauré (cache hit). Le premier run remplit généralement le cache ; le run suivant sur la même clé permet de mesurer le gain.
+Durée de l'étape « Installer les dépendances » relevée dans les détails des jobs, sans cache (run #8, cache miss) puis avec cache (run #10, cache hit) :
 
-| Exécution | État du cache pip | Durée d'installation |
+| Job | Sans cache (cache miss) | Avec cache (cache hit) |
 | --- | --- | --- |
-| Première exécution | Cache miss | À mesurer dans GitHub Actions |
-| Exécution suivante | Cache hit | À mesurer dans GitHub Actions |
+| test (Python 3.11) | 9 s | 5 s |
+| test (Python 3.12) | 4 s | 4 s |
+| test (Python 3.13) | 6 s | 4 s |
+| lint | 5 s | 4 s |
+| Durée totale du run | 32 s | 29 s |
+
+Le gain est modeste : les dépendances du projet (pytest, httpx, ruff) sont légères et pip les télécharge rapidement. Le cache devient plus rentable avec des dépendances plus nombreuses ou plus lourdes. Les durées sont celles enregistrées par GitHub, à la seconde près.
+
+![Étape d'installation sans cache (cache miss, Python 3.11)](img/cache-miss.png)
+
+![Étape d'installation avec cache (cache hit, Python 3.11)](img/cache-hit.png)
 
 ### Rapports de tests
 
 Dans la page du run GitHub Actions, ouvrir **Artifacts** et télécharger `test-results-3.11`, `test-results-3.12` ou `test-results-3.13`. Chaque archive contient le rapport JUnit de la version Python correspondante.
+
+![Artefacts publiés par le run CI](img/artefacts-run.png)
+
+![Rapport JUnit XML contenu dans l'artefact téléchargé](img/artefact-junit-xml.png)
 
 ### Captures
 
