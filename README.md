@@ -58,9 +58,20 @@ docker run --rm -p 8000:8000 taskflow
 ## Équipe
 
 <!-- Lab J1 : remplacez par les noms du binôme -->
-- À compléter
+- Yani SADKI
 
 ## Gouvernance du dépôt
 
 <!-- Lab J1 : listez les règles activées sur main, pourquoi chacune, et ajoutez la capture du push refusé -->
-À compléter.
+
+Règles activées :
+
+✅ Restrict deletions : empêche de supprimer main
+✅ Block force pushes : empêche de réécrire l'historique
+✅ Require a pull request before merging, puis dedans :
+Required approvals : 1
+
+
+![alt text](<Capture d'écran 2026-10-13 120244.png>)
+
+Cela a été refusé car les règles de protection empêchent les actions directes sur `main`. Il faut donc passer par une pull request pour apporter des modifications.
