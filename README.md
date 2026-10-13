@@ -128,12 +128,28 @@ Cette capture montre l'activation de la signature des commits et la vérificatio
 
 ## Pipeline CI
 
-Le workflow [ci.yml](.github/workflows/ci.yml) s'exécute sur les Pull Requests à destination de `main` et lors d'un push sur `main`. Il exécute deux jobs indépendants en parallèle :
+Le workflow [ci.yml](.github/workflows/ci.yml) s'exécute sur les Pull Requests à destination de `main` et lors d'un push sur `main`. Il lance les vérifications en parallèle et interrompt les exécutions précédentes d'une même branche lorsqu'une nouvelle arrive.
 
-- **lint** : lance `ruff check .` pour contrôler les règles de style et détecter notamment les erreurs statiques et les imports inutilisés.
-- **test** : lance `pytest` pour exécuter les tests automatisés de l'API et détecter les régressions fonctionnelles.
+- **lint** : lance `ruff check .` pour contrôler le style et détecter des erreurs statiques.
+- **test** : exécute `pytest` sur Python 3.11, 3.12 et 3.13. Le cache pip évite de retélécharger les dépendances quand la clé de cache existe déjà. Chaque version publie un rapport JUnit en artefact, même si ses tests échouent.
+- **CI OK** : attend la fin de `lint` et de toute la matrice `test`, puis échoue si l'un de ces résultats n'est pas réussi. C'est le check stable à exiger dans le ruleset.
 
-Le ruleset de `main` exige la réussite des checks **lint** et **test** avant la fusion. Une PR dont l'un de ces jobs échoue ne peut donc pas être fusionnée.
+Une matrice crée des checks distincts par version de Python, dont les noms peuvent changer selon la matrice. Si le ruleset exige encore les anciens checks `lint` et `test`, la PR peut donc rester bloquée malgré des résultats verts. Le job **CI OK** regroupe les résultats sous un nom unique et stable ; configure uniquement ce check comme obligatoire dans le ruleset.
+
+### Mesure du cache pip
+
+Comparer dans les détails des jobs la durée de l'étape « Installer les dépendances » lors d'une exécution sans cache (cache miss) et d'une exécution suivante avec le cache restauré (cache hit). Le premier run remplit généralement le cache ; le run suivant sur la même clé permet de mesurer le gain.
+
+| Exécution | État du cache pip | Durée d'installation |
+| --- | --- | --- |
+| Première exécution | Cache miss | À mesurer dans GitHub Actions |
+| Exécution suivante | Cache hit | À mesurer dans GitHub Actions |
+
+### Rapports de tests
+
+Dans la page du run GitHub Actions, ouvrir **Artifacts** et télécharger `test-results-3.11`, `test-results-3.12` ou `test-results-3.13`. Chaque archive contient le rapport JUnit de la version Python correspondante.
+
+### Captures
 
 ![Jobs CI lint et test réussis](img/ci-jobs-success.png)
 
