@@ -176,6 +176,10 @@ Le gain est modeste : les dépendances du projet (pytest, httpx, ruff) sont lég
 
 Dans la page du run GitHub Actions, ouvrir **Artifacts** et télécharger `test-results-3.11`, `test-results-3.12` ou `test-results-3.13`. Chaque archive contient le rapport JUnit de la version Python correspondante.
 
+![Artefacts publiés par le run CI](img/artefacts-run.png)
+
+![Rapport JUnit XML contenu dans l'artefact téléchargé](img/artefact-junit-xml.png)
+
 ### Captures
 
 ![Jobs CI lint et test réussis](img/ci-jobs-success.png)
