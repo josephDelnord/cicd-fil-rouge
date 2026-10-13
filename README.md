@@ -58,7 +58,7 @@ docker run --rm -p 8000:8000 taskflow
 ## Équipe
 
 <!-- Lab J1 : remplacez par les noms du binôme -->
-- À compléter
+- Yani SADKI
 
 ## Gouvernance du dépôt
 
