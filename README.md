@@ -72,8 +72,35 @@ docker run --rm -p 8000:8000 taskflow
 - **Require a pull request before merging (1 approval)** : garantit que tout changement est revu par au moins un pair (le binôme), réduisant ainsi les bugs et facilitant le partage de connaissances.
 - **Require review from Code Owners** : exige obligatoirement l'approbation d'un des propriétaires déclarés dans `.github/CODEOWNERS` dès qu'un fichier critique (ici `.github/workflows/`) est modifié.
 
+![alt text](<img/Capture d'écran 2026-10-13 125726.png>)
+
+![alt text](<img/Capture d'écran 2026-10-13 124051.png>)
+
 ### Capture du push direct refusé :
 
-![Push direct refusé](<Capture d'écran 2026-10-13 120244.png>)
+![Push direct refusé](<img/Capture%20d'écran%202026-10-13%20120244.png>)
 
-*Le push direct a été rejeté par les règles de gouvernance GitHub (Ruleset), rendant obligatoire l'utilisation d'une Pull Request.*
+Cela montre que les règles de gouvernance sont bien appliquées et que tout changement doit passer par une Pull Request.
+
+### Processus de Pull Request
+
+1. je créé une Pull Request, je remplis les informations nécessaires et je soumets pour revue.
+
+![alt text](<img/Capture d'écran 2026-10-13 122510.png>) ![alt text](<img/Capture d'écran 2026-10-13 122520.png>) ![alt text](<img/Capture d'écran 2026-10-13 122527.png>)
+![alt text](<img/Capture d'écran 2026-10-13 122620.png>)
+
+2. Mon coéquipier révise la Pull Request et laisse ses commentaires ou approbations.
+
+![alt text](img/image.png) ![alt text](img/image2.png)
+
+### Création des CODEOWNERS
+
+1. Je créé les CODEOWNERS pour définir les propriétaires des fichiers critiques.
+
+![alt text](<img/Capture d'écran 2026-10-13 123932.png>)
+
+2. Je coche la case correspondant à l'option "Require review from Code Owners" pour activer l'approbation obligatoire des propriétaires de fichiers critiques.
+
+![alt text](<img/Capture d'écran 2026-10-13 124051.png>)
+
+
